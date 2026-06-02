@@ -11,7 +11,8 @@ export const staticCategories = [
   { name: "Moisturizer", image_url: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=600" },
   { name: "Lip Makeup", image_url: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=600" },
   { name: "Face Makeup", image_url: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600" },
-  { name: "Sunscreen", image_url: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=600" }
+  { name: "Sunscreen", image_url: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=600" },
+  { name: "Haircare", image_url: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=800" },
 ];
 
 export const formatRupiah = (angka) => {

@@ -1,11 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // Tambahkan useState
 import { useNavigate, useLocation } from 'react-router-dom';
-import { staticProducts, staticCategories, formatRupiah } from '../data';
+import { staticCategories, formatRupiah } from '../data'; // Hapus staticProducts
 
 export default function Home() {
   const navigate = useNavigate();
   const { hash } = useLocation();
+  
+  // 1. Buat wadah untuk menampung data dari database
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // 2. Fungsi untuk menarik data dari Django saat halaman dimuat
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/products/')
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data); // Masukkan data dari database ke wadah
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  // Logika scroll untuk kategori (biarkan seperti aslinya)
   useEffect(() => {
     if (hash === '#categories') {
       const element = document.getElementById('categories');
@@ -47,19 +66,26 @@ export default function Home() {
             <div className="w-10 h-[1px] bg-[#D18C7E] mx-auto mt-4"></div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-8 md:gap-y-12">
-            {staticProducts.slice(0, 4).map((product) => (
-              <div key={product.id} className="group cursor-pointer">
-                <div className="aspect-[4/5] bg-white overflow-hidden mb-4 relative shadow-sm border border-white">
-                  <img src={product.image_url} alt={product.nama_produk} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-                  <span className="absolute top-3 left-3 bg-white/90 text-[9px] uppercase font-bold tracking-widest px-2 py-1 text-[#D18C7E]">{product.kategori}</span>
+            {/* Tampilkan teks loading jika data belum selesai ditarik */}
+            {loading ? (
+              <p className="text-center col-span-4 py-10">Memuat produk Hapsari...</p>
+            ) : (
+              /* Gunakan state 'products' yang asli dari database, bukan staticProducts */
+              products.slice(0, 4).map((product) => (
+                <div key={product.id} className="group cursor-pointer">
+                  {/* ... isi card biarkan sama persis seperti aslinya ... */}
+                  <div className="aspect-[4/5] bg-white overflow-hidden mb-4 relative shadow-sm border border-white">
+                    <img src={product.image_url} alt={product.nama_produk} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                    <span className="absolute top-3 left-3 bg-white/90 text-[9px] uppercase font-bold tracking-widest px-2 py-1 text-[#D18C7E]">{product.kategori}</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] mb-1">{product.brand}</p>
+                    <h3 className="text-sm font-light text-gray-800 line-clamp-2 min-h-[40px] group-hover:text-[#D18C7E] transition px-2">{product.nama_produk}</h3>
+                    <p className="text-sm font-medium text-[#1A1A1A] mt-2">{formatRupiah(product.harga)}</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-[0.15em] mb-1">{product.brand}</p>
-                  <h3 className="text-sm font-light text-gray-800 line-clamp-2 min-h-[40px] group-hover:text-[#D18C7E] transition px-2">{product.nama_produk}</h3>
-                  <p className="text-sm font-medium text-[#1A1A1A] mt-2">{formatRupiah(product.harga)}</p>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div className="text-center mt-12">
              <button onClick={() => navigate('/shop')} className="border border-[#1A1A1A] text-[#1A1A1A] text-xs uppercase tracking-widest px-8 py-3 hover:bg-[#1A1A1A] hover:text-white transition">

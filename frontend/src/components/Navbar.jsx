@@ -6,13 +6,14 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
 
-  const handleSearchSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery(''); 
+    if (keyword.trim()) {
+      navigate(`/shop?search=${keyword}`);
+      setKeyword(''); 
       setIsMenuOpen(false); 
     }
   };
@@ -61,9 +62,9 @@ export default function Navbar() {
 
           {/* KANAN: Search (Icon Bag Dihapus) */}
           <div className="flex-1 flex items-center justify-end space-x-4 md:space-x-6">
-            <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center border-b border-gray-300 pb-1 focus-within:border-[#D18C7E] transition-colors w-48">
-              <input type="text" placeholder="Cari produk..." className="w-full text-xs bg-transparent focus:outline-none placeholder-gray-400" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              <button type="submit" className="text-gray-500 hover:text-[#D18C7E] transition">
+            <form onSubmit={handleSearch} className="flex items-center border border-gray-300 rounded px-3 py-1 w-64">
+              <input type="text" placeholder="Cari produk..." value={keyword} onChange={(e) => setKeyword(e.target.value)} className="outline-none text-sm w-full bg-transparent"/>
+              <button type="submit" className="text-gray-500 hover:text-[#D18C7E] ml-2">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
               </button>
             </form>
